@@ -5,6 +5,7 @@ const itemsRouter = require('./routes/items')
 
 const app = express()
 
+app.use(express.json())
 app.use('/containers', containersRouter)
 app.use('/items', itemsRouter)
 
