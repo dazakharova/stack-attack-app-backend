@@ -6,9 +6,18 @@ containersRouter.post('/', async (request, response) => {
     const { name, parent_id, user_id } = request.body;
 
     try {
-        const result = await query('INSERT INTO containers (name, parent_id, user_id) VALUES () $1, $2, $3', [
-            name, parent_id, user_id
-        ]);
+        let result;
+        if (parent_id) { // If parent_id is provided, use it in the query
+            result = await query(
+                'INSERT INTO containers (name, parent_id, user_id) VALUES ($1, $2, $3) RETURNING *',
+                [name, parent_id, user_id]
+            );
+        } else { // If parent_id is not provided, exclude it from the query
+            result = await query(
+                'INSERT INTO containers (name, user_id) VALUES ($1, $2) RETURNING *',
+                [name, user_id]
+            );
+        }
         response.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);
