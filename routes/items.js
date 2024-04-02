@@ -54,3 +54,5 @@ itemsRouter.delete('/:itemId', async(request, response) => {
         resposne.status(500).json({ error: error });
     }
 })
+
+module.exports = itemsRouter

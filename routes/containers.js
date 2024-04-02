@@ -57,3 +57,5 @@ containersRouter.delete('/:id', async(request, response) => {
         response.status(500).json({ error: error });
     }
 })
+
+module.exports = containersRouter
