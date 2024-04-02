@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const authRouter = require('express').Router()
-const { query } = require('../helpers/db.js')
+const { query } = require('../db/index.js')
 
 // Middleware to authenticate and authorize users
 const authenticateToken = (request, response, next) => {
