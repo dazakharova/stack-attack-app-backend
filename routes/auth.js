@@ -8,7 +8,7 @@ const { authenticateToken } = require('../middleware/authentication')
 
 // The /register endpoint handler
 authRouter.post('/register', async(request, response) => {
-    const { email, password } = request.body
+    const { name, email, password } = request.body
 
     try {
         // Check if the user already exists
@@ -23,8 +23,8 @@ authRouter.post('/register', async(request, response) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Insert the new user into the database
-        const newUser = await query('INSERT INTO users (email, password) values ($1, $2) RETURNING *',
-            [email, hashedPassword]
+        const newUser = await query('INSERT INTO users (name, email, password) values ($1, $2, $3) RETURNING *',
+            [name, email, hashedPassword]
         );
 
         // Respond with the created user (excluding password)
