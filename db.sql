@@ -6,6 +6,7 @@ CREATE DATABASE stack_attack;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(64) NOT NULL
 );
