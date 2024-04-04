@@ -48,7 +48,7 @@ containersRouter.put('/:id', authenticateToken, async(request, response) => {
         const result = await query('UPDATE containers SET name = $1 WHERE id = $2 RETURNING *', [
             name, id
         ]);
-        response.status(204).json(result.rows[0])
+        response.status(200).json(result.rows[0])
     } catch (error) {
         console.error(error);
         response.status(500).json({ error: error })
