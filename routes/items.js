@@ -1,8 +1,9 @@
 const itemsRouter = require('express').Router();
 const { query } = require('../db/index.js');
+const { authenticateToken } = require('../middleware/authentication');
 
 // Create a new item
-itemsRouter.post('/', async(request, response) => {
+itemsRouter.post('/', authenticateToken, async(request, response) => {
     const { name, parent_id, user_id} = request.body;
 
     try {
@@ -16,7 +17,7 @@ itemsRouter.post('/', async(request, response) => {
 })
 
 // Return all items for the user
-itemsRouter.get('/users/:userId', async(request, response) => {
+itemsRouter.get('/users/:userId', authenticateToken, async(request, response) => {
     const { userID } = request.params;
 
     try {
@@ -29,7 +30,7 @@ itemsRouter.get('/users/:userId', async(request, response) => {
 })
 
 // Update an item
-itemsRouter.put('/:itemId', async(request, response) => {
+itemsRouter.put('/:itemId', authenticateToken, async(request, response) => {
     const { id } = request.params;
     const { name } = request.body;
 
@@ -43,7 +44,7 @@ itemsRouter.put('/:itemId', async(request, response) => {
 })
 
 // Delete an item
-itemsRouter.delete('/:itemId', async(request, response) => {
+itemsRouter.delete('/:itemId', authenticateToken, async(request, response) => {
     const { id } = request.params;
 
     try {

@@ -1,8 +1,9 @@
 const containersRouter = require('express').Router();
 const { query } = require('../db/index.js');
+const { authenticateToken } = require('../middleware/authentication');
 
 // Create a new container
-containersRouter.post('/', async (request, response) => {
+containersRouter.post('/', authenticateToken, async (request, response) => {
     const { name, parent_id, user_id } = request.body;
 
     try {
@@ -26,7 +27,7 @@ containersRouter.post('/', async (request, response) => {
 })
 
 // Return all containers for user
-containersRouter.get('/users/:userId', async(request, response) => {
+containersRouter.get('/users/:userId', authenticateToken, async(request, response) => {
     const { userId } = request.params;
 
     try {
@@ -39,7 +40,7 @@ containersRouter.get('/users/:userId', async(request, response) => {
 })
 
 // Update a container
-containersRouter.put('/:id', async(request, response) => {
+containersRouter.put('/:id', authenticateToken, async(request, response) => {
     const { id } = request.params;
     const { name } = request.body;
 
@@ -55,7 +56,7 @@ containersRouter.put('/:id', async(request, response) => {
 })
 
 // Delete a container
-containersRouter.delete('/:id', async(request, response) => {
+containersRouter.delete('/:id', authenticateToken, async(request, response) => {
     const { id } = request.params;
 
     try {
