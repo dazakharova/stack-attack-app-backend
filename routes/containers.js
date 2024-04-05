@@ -27,11 +27,9 @@ containersRouter.post('/', authenticateToken, async (request, response) => {
 })
 
 // Return all containers for user
-containersRouter.get('/users/:userId', authenticateToken, async(request, response) => {
-    const { userId } = request.params;
-
+containersRouter.get('/', authenticateToken, async(request, response) => {
     try {
-        const result = await query('SELECT * FROM containers WHERE user_id = $1', [userId]);
+        const result = await query('SELECT * FROM containers WHERE user_id = $1', [request.userID]);
         response.status(200).json(result.rows);
     } catch (error) {
         console.error(error);
