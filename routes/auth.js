@@ -62,8 +62,14 @@ authRouter.post('/login', async(request, response) => {
             { expiresIn: '1h' }
         )
 
-        // Send the token to the client
-        response.send({ token })
+        response.cookie('token', token, {
+            httpOnly: true, // The cookie is not accessible via JavaScript
+            secure: true, // To send the cookie over HTTPS only
+            sameSite: 'none',
+            maxAge: 3600000, // Cookie expiration duration in milliseconds
+        });
+
+        response.status(200).send({ message: 'Login successful' });
     } catch (error) {
         console.error('Login error:', error)
         response.status(500).send({ error: error, message: 'Internal server error' })
