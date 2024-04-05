@@ -7,7 +7,7 @@ itemsRouter.post('/', authenticateToken, async(request, response) => {
     const { name, parent_id, user_id} = request.body;
 
     try {
-        const result = await('INSERT INTO items (name, parent_id, user_id) VALUES ($1, $2, $3) RETURNING *',
+        const result = await query('INSERT INTO items (name, container_id, user_id) VALUES ($1, $2, $3) RETURNING *',
         [name, parent_id, user_id]);
         response.status(201).json(result.rows[0]);
     } catch (error) {
@@ -17,11 +17,9 @@ itemsRouter.post('/', authenticateToken, async(request, response) => {
 })
 
 // Return all items for the user
-itemsRouter.get('/users/:userId', authenticateToken, async(request, response) => {
-    const { userID } = request.params;
-
+itemsRouter.get('/', authenticateToken, async(request, response) => {
     try {
-        const result = await query('SELECT * FROM items WHERE id = $1', [userId]);
+        const result = await query('SELECT * FROM items WHERE user_id = $1', [request.userID]);
         response.status(200).json(result.rows);
     } catch (error) {
         console.error(error);
@@ -35,8 +33,8 @@ itemsRouter.put('/:itemId', authenticateToken, async(request, response) => {
     const { name } = request.body;
 
     try {
-        const result = await query('UPDATE items SET name = $1 RETURNING *', [id]);
-        response.status(204).json(result.rows[0]);
+        const result = await query('UPDATE items SET name = $1 WHERE id = $2 RETURNING *', [name, id]);
+        response.status(200).json(result.rows[0]);
     } catch (error) {
         console.error(error);
         response.status(500).json({ error: error });
@@ -52,7 +50,7 @@ itemsRouter.delete('/:itemId', authenticateToken, async(request, response) => {
         response.status(204).json({ id: id });
     } catch (error) {
         console.error(error);
-        resposne.status(500).json({ error: error });
+        response.status(500).json({ error: error });
     }
 })
 
