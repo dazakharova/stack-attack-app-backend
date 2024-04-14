@@ -4,22 +4,24 @@ const { authenticateToken } = require('../middleware/authentication');
 
 // Create a new container
 containersRouter.post('/', authenticateToken, async (request, response) => {
-    const { name, parent_id, user_id } = request.body;
+    const { name, parent_id } = request.body;
 
     try {
         let result;
         if (parent_id) { // If parent_id is provided, use it in the query
             result = await query(
                 'INSERT INTO containers (name, parent_id, user_id) VALUES ($1, $2, $3) RETURNING *',
-                [name, parent_id, user_id]
+                [name, parent_id, request.userID]
             );
         } else { // If parent_id is not provided, exclude it from the query
             result = await query(
                 'INSERT INTO containers (name, user_id) VALUES ($1, $2) RETURNING *',
-                [name, user_id]
+                [name, request.userID]
             );
         }
-        response.status(201).json(result.rows[0]);
+
+        // Respond with all container records for the user
+        response.status(201).json(result.rows);
     } catch (error) {
         console.error(error);
         response.status(500).json({ error: error })

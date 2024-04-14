@@ -4,11 +4,11 @@ const { authenticateToken } = require('../middleware/authentication');
 
 // Create a new item
 itemsRouter.post('/', authenticateToken, async(request, response) => {
-    const { name, parent_id, user_id} = request.body;
+    const { name, container_id } = request.body;
 
     try {
         const result = await query('INSERT INTO items (name, container_id, user_id) VALUES ($1, $2, $3) RETURNING *',
-        [name, parent_id, user_id]);
+        [name, container_id, request.userID]);
         response.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);
