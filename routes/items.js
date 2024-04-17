@@ -4,12 +4,12 @@ const { authenticateToken } = require('../middleware/authentication');
 
 // Create a new item
 itemsRouter.post('/', authenticateToken, async(request, response) => {
-    const { name, container_id } = request.body;
+    const { name, description, container_id } = request.body;
 
     try {
-        const result = await query('INSERT INTO items (name, container_id, user_id) VALUES ($1, $2, $3) RETURNING *',
-        [name, container_id, request.userID]);
-        response.status(201).json(result.rows[0]);
+        const result = await query('INSERT INTO items (name, description, container_id, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
+        [name, description, container_id, request.userID]);
+        response.status(201).json(result.rows);
     } catch (error) {
         console.error(error);
         response.status(500).json({ error });
@@ -29,12 +29,17 @@ itemsRouter.get('/', authenticateToken, async(request, response) => {
 
 // Update an item
 itemsRouter.put('/:itemId', authenticateToken, async(request, response) => {
-    const { id } = request.params;
-    const { name } = request.body;
+    const { itemId } = request.params;
+    const { name, description } = request.body;
 
     try {
-        const result = await query('UPDATE items SET name = $1 WHERE id = $2 RETURNING *', [name, id]);
-        response.status(200).json(result.rows[0]);
+        if (name) {
+            const result = await query('UPDATE items SET name = $1 WHERE id = $2 RETURNING *', [name, itemId]);
+            response.status(200).json(result.rows[0]);
+        } else if (description) {
+            const result = await query('UPDATE items SET description = $1 WHERE id = $2 RETURNING *', [description, itemId]);
+            response.status(200).json(result.rows[0]);
+        }
     } catch (error) {
         console.error(error);
         response.status(500).json({ error: error });
