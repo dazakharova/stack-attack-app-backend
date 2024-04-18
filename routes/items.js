@@ -48,11 +48,11 @@ itemsRouter.put('/:itemId', authenticateToken, async(request, response) => {
 
 // Delete an item
 itemsRouter.delete('/:itemId', authenticateToken, async(request, response) => {
-    const { id } = request.params;
+    const { itemId } = request.params;
 
     try {
-        const result = await query('DELETE FROM items WHERE id = $1', [id]);
-        response.status(204).json({ id: id });
+        const result = await query('DELETE FROM items WHERE id = $1 RETURNING *', [itemId]);
+        response.status(200).json(result.rows[0]);
     } catch (error) {
         console.error(error);
         response.status(500).json({ error: error });
