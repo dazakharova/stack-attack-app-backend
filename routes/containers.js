@@ -60,8 +60,8 @@ containersRouter.delete('/:id', authenticateToken, async(request, response) => {
     const { id } = request.params;
 
     try {
-        const result = await query('DELETE FROM containers WHERE id = $1', [id]);
-        response.status(204).json({ id: id });
+        const result = await query('DELETE FROM containers WHERE id = $1 RETURNING *', [id]);
+        response.status(200).json(result.rows[0]);
     } catch(error) {
         console.error(error);
         response.status(500).json({ error: error });

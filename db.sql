@@ -26,6 +26,7 @@ CREATE TABLE items (
    description TEXT,
    container_id INTEGER NOT NULL,
    user_id INTEGER NULL,
+   image TEXT,
    FOREIGN KEY (container_id) REFERENCES containers(id) ON DELETE CASCADE,
    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
