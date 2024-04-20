@@ -6,6 +6,21 @@ const { query } = require('../db/index.js')
 const { authenticateToken } = require('../middleware/authentication')
 
 
+// Checking authentication status
+authRouter.get('/status', (req, res) => {
+    const token = req.cookies['token'];
+
+    if (!token) {
+        return res.json({ isAuthenticated: false });
+    }
+    jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
+        if (error) {
+            return res.json({ isAuthenticated: false });
+        }
+        res.json({ isAuthenticated: true, userId: user.userId });
+    })
+})
+
 // The /register endpoint handler
 authRouter.post('/register', async(request, response) => {
     const { name, email, password } = request.body
@@ -78,8 +93,13 @@ authRouter.post('/login', async(request, response) => {
 
 authRouter.post('/logout', (request, response) => {
     // Set the JWT cookie to a past expiration date, clearing it
-    response.cookie('token', '', { expires: new Date(0) });
-
+    response.cookie('token', '', {
+        httpOnly: true, // Match the setting
+        secure: true, // Match the setting
+        sameSite: 'none', // Match the setting
+        expires: new Date(0) // Set a past date to clear the cookie
+    })
+    response.set('Cache-Control', 'no-store');
     response.status(200).send({ message: 'Logged out successfully' });
 })
 
