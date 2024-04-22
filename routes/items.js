@@ -30,7 +30,7 @@ itemsRouter.get('/', authenticateToken, async(request, response) => {
 // Update an item
 itemsRouter.put('/:itemId', authenticateToken, async(request, response) => {
     const { itemId } = request.params;
-    const { name, description } = request.body;
+    const { name, description, image } = request.body;
 
     try {
         if (name) {
@@ -38,6 +38,9 @@ itemsRouter.put('/:itemId', authenticateToken, async(request, response) => {
             response.status(200).json(result.rows[0]);
         } else if (description) {
             const result = await query('UPDATE items SET description = $1 WHERE id = $2 RETURNING *', [description, itemId]);
+            response.status(200).json(result.rows[0]);
+        } else if (image) {
+            const result = await query('UPDATE items SET image = $1 WHERE id = $2 RETURNING *', [image, itemId]);
             response.status(200).json(result.rows[0]);
         }
     } catch (error) {
