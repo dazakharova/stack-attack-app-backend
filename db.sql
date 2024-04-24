@@ -16,6 +16,7 @@ CREATE TABLE containers (
     name VARCHAR(255) NOT NULL,
     parent_id INTEGER,
     user_id INTEGER NOT NULL,
+    box_color VARCHAR(50),
     FOREIGN KEY (parent_id) REFERENCES containers(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
