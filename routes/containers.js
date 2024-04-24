@@ -46,7 +46,7 @@ containersRouter.get("/", authenticateToken, async (request, response) => {
 // Update a container
 containersRouter.put("/:id", authenticateToken, async (request, response) => {
   const { id } = request.params;
-  const { name, boxcolor } = request.body;
+  const { name, box_color } = request.body;
 
   try {
     if (name) {
@@ -55,10 +55,10 @@ containersRouter.put("/:id", authenticateToken, async (request, response) => {
         [name, id]
       );
       response.status(200).json(result.rows[0]);
-    } else if (boxcolor) {
+    } else if (box_color) {
       const result = await query(
         "UPDATE items SET description = $1 WHERE id = $2 RETURNING *",
-        [boxcolor, id]
+        [box_color, id]
       );
       response.status(200).json(result.rows[0]);
     } else {
