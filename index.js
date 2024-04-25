@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const containersRouter = require('./routes/containers')
 const itemsRouter = require('./routes/items')
 const authRouter = require('./routes/auth')
+const userRouter = require('./routes/user')
 
 
 const app = express()
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 app.use('/containers', containersRouter)
 app.use('/items', itemsRouter)
 app.use('/auth', authRouter)
+app.use('/users', userRouter)
 
 const PORT = 3001
 
