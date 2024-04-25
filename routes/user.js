@@ -5,7 +5,7 @@ const { authenticateToken } = require('../middleware/authentication');
 // Get a profile picture
 userRouter.get('/getPicture', authenticateToken, async(request, response) => {
     try {
-        const result = await query('GET profile_pic WHERE id = $1', [request.userID]);
+        const result = await query('SELECT profile_pic FROM users WHERE id = $1', [request.userID]);
         response.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);
