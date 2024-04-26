@@ -59,7 +59,7 @@ authRouter.post('/login', async(request, response) => {
         // Check if the user exists
         const result = await query('SELECT * FROM users WHERE email = $1', [email])
         if (result.rows.length === 0) {
-            return response.status(401).send({ message: 'Invalid username or password.' })
+            return response.status(401).send({ message: 'Invalid username' })
         }
 
         const user = result.rows[0]
@@ -67,7 +67,7 @@ authRouter.post('/login', async(request, response) => {
         // Compare provided password with stored hash
         const isValid = await bcrypt.compare(password, user.password)
         if (!isValid) {
-            return response.status(401).send({ message: 'Invalid username or password.' })
+            return response.status(401).send({ message: 'Invalid password' })
         }
 
         // Generate JWT
