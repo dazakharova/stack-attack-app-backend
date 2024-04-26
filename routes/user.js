@@ -19,6 +19,9 @@ userRouter.put('/updatePicture', authenticateToken, async(request, response) => 
 
     try {
         const result = await query('UPDATE users SET profile_pic = $1 WHERE id = $2 RETURNING *', [image, request.userID]);
+
+        // Exclude password from the response
+        delete result.rows[0].password;
         response.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);
