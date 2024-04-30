@@ -125,11 +125,4 @@ authRouter.get('/profile', authenticateToken, async (request, response) => {
 });
 
 
-// Example of protecting a route
-// authRouter.get('/protected', authenticateToken, (request, response) => {
-//     response.send('This is a protected route.');
-// });
-
-
-
 module.exports = authRouter

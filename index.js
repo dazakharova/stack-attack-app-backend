@@ -18,11 +18,11 @@ app.use(cors({
 app.use(cookieParser());
 
 // Middleware to set cache-control headers
-app.use((req, res, next) => {
-    // Set Cache-Control for all responses
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-    next();
-})
+// app.use((req, res, next) => {
+//     // Set Cache-Control for all responses
+//     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+//     next();
+// })
 
 app.use('/containers', containersRouter)
 app.use('/items', itemsRouter)

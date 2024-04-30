@@ -42,22 +42,13 @@ containersRouter.get('/', authenticateToken, async(request, response) => {
 // Update a container
 containersRouter.put('/:id', authenticateToken, async(request, response) => {
   const { id } = request.params;
-  const { name, box_color } = request.body;
+  const { name } = request.body;
 
   try {
-    let result;
-    if (name) {
-      result = await query('UPDATE containers SET name = $1 WHERE id = $2 RETURNING *', [
-        name, id
-      ]);
-      response.status(200).json(result.rows[0])
-    } else if (box_color) {
-      result = await query(
-          'UPDATE items SET description = $1 WHERE id = $2 RETURNING *',
-          [box_color, id]
-      );
-      response.status(200).json(result.rows[0])
-    }
+    const result = await query('UPDATE containers SET name = $1 WHERE id = $2 RETURNING *', [
+      name, id
+    ]);
+    response.status(200).json(result.rows[0])
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: error })

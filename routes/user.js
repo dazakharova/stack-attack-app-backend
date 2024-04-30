@@ -7,6 +7,10 @@ const bcrypt = require("bcrypt");
 userRouter.get('/getPicture', authenticateToken, async(request, response) => {
     try {
         const result = await query('SELECT profile_pic FROM users WHERE id = $1', [request.userID]);
+
+        // Exclude password from the response data
+        delete result.rows[0].password
+
         response.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);
