@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
@@ -17,19 +18,12 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-// Middleware to set cache-control headers
-// app.use((req, res, next) => {
-//     // Set Cache-Control for all responses
-//     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-//     next();
-// })
-
 app.use('/containers', containersRouter)
 app.use('/items', itemsRouter)
 app.use('/auth', authRouter)
 app.use('/users', userRouter)
 
-const PORT = 3001
+const PORT = process.env.PORT
 
 
 app.listen(PORT)
