@@ -13,7 +13,6 @@ authRouter.get('/status', (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    console.log('got token!!!', token)
     if (!token) {
         return res.json({ isAuthenticated: false });
     }
