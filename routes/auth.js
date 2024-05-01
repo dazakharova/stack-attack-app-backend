@@ -8,8 +8,12 @@ const { authenticateToken } = require('../middleware/authentication')
 
 // Checking authentication status
 authRouter.get('/status', (req, res) => {
-    const token = req.cookies['token'];
+    // const token = req.cookies['token'];
 
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    console.log('got token!!!', token)
     if (!token) {
         return res.json({ isAuthenticated: false });
     }
@@ -77,14 +81,7 @@ authRouter.post('/login', async(request, response) => {
             { expiresIn: '1h' }
         )
 
-        response.cookie('token', token, {
-            httpOnly: true, // The cookie is not accessible via JavaScript
-            secure: true, // To send the cookie over HTTPS only
-            sameSite: 'none',
-            maxAge: 3600000, // Cookie expiration duration in milliseconds
-        });
-
-        response.status(200).send({ message: 'Login successful' });
+        response.status(200).send({ message: 'Login successful', token: token });
     } catch (error) {
         console.error('Login error:', error)
         response.status(500).send({ error: error, message: 'Internal server error' })
@@ -92,15 +89,7 @@ authRouter.post('/login', async(request, response) => {
 })
 
 authRouter.post('/logout', (request, response) => {
-    // Set the JWT cookie to a past expiration date, clearing it
-    response.cookie('token', '', {
-        httpOnly: true, // Match the setting
-        secure: true, // Match the setting
-        sameSite: 'none', // Match the setting
-        expires: new Date(0) // Set a past date to clear the cookie
-    })
-    response.set('Cache-Control', 'no-store');
-    response.status(200).send({ message: 'Logged out successfully' });
+    response.status(200).send({ message: 'Logged out successfully', token: '' });
 })
 
 authRouter.get('/profile', authenticateToken, async (request, response) => {

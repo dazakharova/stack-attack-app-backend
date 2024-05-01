@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 
 // Middleware to authenticate and authorize users
 const authenticateToken = (request, response, next) => {
-    // Access the access_token cookie directly
-    const token = request.cookies['token'];
+    const authHeader = request.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log('got token!!!', token)
 
     if (!token) {
         console.error('Empty token');
@@ -14,7 +15,7 @@ const authenticateToken = (request, response, next) => {
         if (error) {
             console.error('Verify token: ' + error)
             return response.sendStatus(403)
-        }; // If token is not valid or expired
+        } // If token is not valid or expired
         request.userID = user.userId;
         next();
     });
