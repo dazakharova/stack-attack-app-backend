@@ -23,7 +23,7 @@ app.use('/items', itemsRouter)
 app.use('/auth', authRouter)
 app.use('/users', userRouter)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 10000
 
 
 app.listen(PORT)
